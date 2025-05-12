@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  fmp-mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fmp-mcp-server
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "python3", "health_check.py", "--host", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  default:
+    name: agentic-trading-fleet-network
+    external: true
